@@ -1,27 +1,19 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import baseBallData from '../../data.js';
 import { Bar } from '@vx/shape';
 import { Group } from '@vx/group';
 import { GradientTealBlue, LinearGradient } from '@vx/gradient';
 import { scaleBand, scaleLinear } from '@vx/scale';
 import { AxisLeft, AxisBottom } from '@vx/axis';
+import { fetchBaseBallData } from '../../utils/utils.js';
 
 export default function App() {
   const [data, setData] = useState([]);
   useEffect(() => {
-    const mungedBaseballData = baseBallData
-      .leader_hitting_repeater
-      .leader_hitting_mux
-      .queryResults.row.map(player => ({
-        avg: player.avg,
-        playerName: player.name_display_first_last
-      }));    
-    
-    setData(mungedBaseballData);
+    fetchBaseBallData()
+      .then (res => setData(res));
   }, []);
   console.log(data);
   // const xMax = data.leader_hitting_repeater.leader_hitting_mux.queryResults.row.totalSize;
-
   // accessors return the label and value of that data item
   const x = d => d.playerName;
   const y = d => d.avg;
