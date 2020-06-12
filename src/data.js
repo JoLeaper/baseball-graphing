@@ -1,4 +1,4 @@
-export const baseBallData = {
+const baseBallData = {
   'leader_hitting_repeater': {
     'copyRight': ' Copyright 2020 MLB Advanced Media, L.P.  Use of any content on this page acknowledges agreement to the terms posted here http://gdx.mlb.com/components/copyright.txt  ',
     'leader_hitting_mux': {
@@ -307,3 +307,5 @@ export const baseBallData = {
     }
   }
 };
+
+export default baseBallData;
