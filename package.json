@@ -25,6 +25,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@vx/axis": "0.0.197",
+    "@vx/vx": "0.0.197",
     "react": "^16.13.1",
     "react-dom": "^16.13.1"
   },
