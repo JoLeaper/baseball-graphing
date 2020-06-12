@@ -8,7 +8,15 @@ import { scaleBand, scaleLinear } from '@vx/scale';
 export default function App() {
   const [data, setData] = useState({});
   useEffect(() => {
-    setData(baseBallData);
+    const mungedBaseballData = baseBallData
+      .leader_hitting_repeater
+      .leader_hitting_mux
+      .queryResults.row.map(player => ({
+        avg: player.avg,
+        name: player.name_display_first_last
+      }));    
+    
+    setData(mungedBaseballData);
   }, []);
   console.log(data);
   // const xMax = data.leader_hitting_repeater.leader_hitting_mux.queryResults.row.totalSize;
