@@ -1,5 +1,5 @@
 export const fetchBaseBallData = () => {
-  return fetch('http://lookup-service-prod.mlb.com/json/named.leader_hitting_repeater.bam?sport_code=\'mlb\'&results=5&game_type=\'R\'&season=\'2017\'&sort_column=\'ab\'')
+  return fetch('http://lookup-service-prod.mlb.com/json/named.leader_hitting_repeater.bam?sport_code=\'mlb\'&results=20&game_type=\'R\'&season=\'2017\'&sort_column=\'avg\'')
     .then(res => res.json())
     .then(data => data
       .leader_hitting_repeater
