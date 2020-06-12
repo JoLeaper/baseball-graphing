@@ -4,49 +4,76 @@ import { Bar } from '@vx/shape';
 import { Group } from '@vx/group';
 import { GradientTealBlue, LinearGradient } from '@vx/gradient';
 import { scaleBand, scaleLinear } from '@vx/scale';
+import { AxisLeft, AxisBottom } from '@vx/axis';
 
 export default function App() {
-  const [data, setData] = useState({});
+  const [data, setData] = useState([]);
   useEffect(() => {
     const mungedBaseballData = baseBallData
       .leader_hitting_repeater
       .leader_hitting_mux
       .queryResults.row.map(player => ({
         avg: player.avg,
-        name: player.name_display_first_last
+        playerName: player.name_display_first_last
       }));    
     
     setData(mungedBaseballData);
   }, []);
   console.log(data);
   // const xMax = data.leader_hitting_repeater.leader_hitting_mux.queryResults.row.totalSize;
-  // const yMax = height - verticalMargin;
 
-  return (<>
-    <h1>Hello World</h1>
-    <svg width={400} height={400}>
-      <LinearGradient
-        from={'#e9e9e9'}
-        to={'#fff'}
-        id={'gradientFill'}
-      />
+  // accessors return the label and value of that data item
+  const x = d => d.playerName;
+  const y = d => d.avg;
+
+  // const yMax = height - verticalMargin;
+  const width = 800;
+  const height = 400;
+  // bounds
+  const xMax = width - 80;
+  const yMax = height - 80;
+  // scales
+  const xScale = scaleBand({
+    rangeRound: [0, xMax],
+    domain: data.map(x),
+    padding: 0.4
+  });
+  const yScale = scaleLinear({
+    rangeRound: [0, yMax],
+    domain: [Math.max(...data.map(y)), 0]
+  });
+  return (
+    <svg width={width} height={height}>
+      <GradientTealBlue id="teal"/>
       <rect
-        width={400}
-        height={400}
-        fill={'url(#gradientFill)'}
-        rx={5}
+        width={width}
+        height={height}
+        fill={'#FFFFFF'}
+        rx={14}
       />
-      <Bar
-        key={'my-key'}
-        x={500}
-        y={200}
-        width={800}
-        height={500}
-        fill="rgba(23, 233, 217, .5)"
-      // onClick={() => {
-      //   if (events) alert(`clicked: ${JSON.stringify(Object.values(d))}`);
-      // }}
-      />
+      <Group top={25} left={55}>
+        <AxisLeft left={10} scale={yScale} numTicks={4} label="AVB" />
+        {data.map((d, i) => {
+          const label = x(d);
+          const barWidth = xScale.bandwidth();
+          const barHeight = yMax - yScale(y(d));
+          const barX = xScale(label);
+          const barY = yMax - barHeight;
+          return (
+            <Bar
+              key={`bar-${label}`}
+              x={barX}
+              y={barY}
+              width={barWidth}
+              height={barHeight}
+              fill={'url(#teal)'}
+              onClick={() => {
+                alert(`clicked: ${JSON.stringify(Object.values(d))}`);
+              }}
+            />
+          );
+        })}
+        <AxisBottom scale={xScale} label="Player" labelOffset={15} top={yMax} />
+      </Group>
     </svg>
-  </>);
-}
+  );}
